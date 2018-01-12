@@ -1,0 +1,74 @@
+buildscript {
+    ext.kotlin_version = '1.2.10'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
+}
+
+group 'edu.nitt.distributed'
+version '1.0'
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'application'
+apply plugin: 'war'
+
+sourceCompatibility = 1.8
+
+sourceSets {
+    deploy
+}
+repositories {
+    mavenCentral()
+}
+
+version = '3.5.0'
+
+dependencies {
+    compile "io.vertx:vertx-core:$version"
+    compile "io.vertx:vertx-web:$version"
+    compile "io.vertx:vertx-rx:$version"
+    compile "io.vertx:vertx-rx-java2:$version"
+    compile "io.vertx:vertx-lang-kotlin:$version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+def mainVerticle = "edu.nitt.distributed.MainVerticle"
+mainClassName = "io.vertx.core.Starter"
+
+run {
+    args = ["run", mainVerticle]
+}
+
+shadowJar {
+    manifest{
+        attributes 'Main-Verticle': 'edu.nitt.distibuted.MainVerticle'
+    }
+    mergeServiceFiles {
+        include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
+    }
+    into 'webroot', {
+        from 'webroot'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.1'
+}

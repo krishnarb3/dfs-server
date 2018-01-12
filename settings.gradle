@@ -1,0 +1,6 @@
+rootProject.name = 'file-server'
+include 'model'
+include 'service'
+include 'web'
+include 'data'
+
