@@ -33,6 +33,7 @@ out/**
 # Misc
 app/res/values/keys.xml
 *.diff
+.vertx
 
 #Keystores
 release.keystore

@@ -40,6 +40,7 @@ dependencies {
     compile "io.vertx:vertx-rx:$version"
     compile "io.vertx:vertx-rx-java2:$version"
     compile "io.vertx:vertx-lang-kotlin:$version"
+    compile "io.vertx:vertx-ignite:$version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
