@@ -23,6 +23,7 @@ repositories {
 
 dependencies {
     compile project(':model')
+    compile project(':data')
     compile "io.vertx:vertx-core:$version"
     compile "io.vertx:vertx-rx:$version"
     compile "io.vertx:vertx-rx-java2:$version"
