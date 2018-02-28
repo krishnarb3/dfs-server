@@ -8,11 +8,12 @@ import org.apache.ignite.Ignition
 
 data class DfsStore(val scheduler: Scheduler) {
 
-    private val cache: IgniteCache<String, String> =
-            Ignition.ignite().getOrCreateCache<String, String>("dfs")
+    private val cache: IgniteCache<String, Int> =
+            Ignition.ignite().getOrCreateCache<String, Int>("dfs")
 
-    fun put(key: String, value: String) =
+    fun put(key: String, value: Int): Flowable<Unit?> =
         Flowable.just(key).observeOn(scheduler).map { cache.put(key, value) }
 
-    fun get(key: String) = cache.get(key)
+    fun get(key: String): Flowable<Int> = Flowable.just(key).observeOn(scheduler).map { cache.get(key) ?: 0 }
+
 }
