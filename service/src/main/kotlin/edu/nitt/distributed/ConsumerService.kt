@@ -21,12 +21,12 @@ class ConsumerService(vertx: Vertx) {
                 when (peers) {
                     0 -> {
                         dfsStore.put(room, 1).subscribe({ println("Initiated room: $room") })
-                        EventBusResponse("$room created", room)
+                        EventBusResponse("$room.created", room)
                     }
                     1 -> {
                         dfsStore.put(room, 2).subscribe({ println("Completed room: $room") })
-                        EventBusResponse("joined", room)
-                        EventBusResponse("ready", room)
+                        EventBusResponse("$room.joined", room)
+                        EventBusResponse("$room.ready", room)
                     }
                     else -> EventBusResponse("$room error", room)
                 }
