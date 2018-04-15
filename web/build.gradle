@@ -1,32 +1,24 @@
-buildscript {
-    ext.kotlin_version = '1.2.10'
-
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '2.0.2'
 }
 
 group 'edu.nitt.distributed'
-version '3.5.0'
+version '3.5.1'
+
+def mainVerticle = "edu.nitt.distributed.FileServerVerticle"
+mainClassName = "io.vertx.core.Starter"
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
-}
-
-def mainVerticle = "edu.nitt.distributed.MainVerticle"
-mainClassName = "io.vertx.core.Starter"
-
-run {
-    args = ["run", mainVerticle]
 }
 
 dependencies {
@@ -40,6 +32,25 @@ dependencies {
     compile "io.vertx:vertx-lang-kotlin:$version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+run {
+    args = ["run", mainVerticle]
+}
+
+shadowJar {
+    mainClassName = 'io.vertx.core.Launcher'
+    classifier = 'fat'
+    manifest {
+        attributes "Main-Verticle": mainVerticle
+    }
+    mergeServiceFiles {
+        include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
+        include 'META-INF/spring.*'
+    }
+    into 'webroot', {
+        from 'webroot'
+    }
 }
 
 compileKotlin {

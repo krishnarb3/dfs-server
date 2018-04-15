@@ -12,7 +12,6 @@ buildscript {
 plugins {
     id 'java'
     id 'application'
-    id 'com.github.johnrengelman.shadow' version '1.2.3'
 }
 
 group 'edu.nitt.distributed'
@@ -32,7 +31,7 @@ repositories {
     mavenCentral()
 }
 
-version = '3.5.0'
+version = '3.5.1'
 
 dependencies {
     compile "io.vertx:vertx-core:$version"
@@ -49,25 +48,6 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
-}
-
-def mainVerticle = "edu.nitt.distributed.MainVerticle"
-mainClassName = "io.vertx.core.Starter"
-
-run {
-    args = ["run", mainVerticle]
-}
-
-shadowJar {
-    manifest{
-        attributes 'Main-Verticle': 'edu.nitt.distibuted.MainVerticle'
-    }
-    mergeServiceFiles {
-        include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
-    }
-    into 'webroot', {
-        from 'webroot'
-    }
 }
 
 task wrapper(type: Wrapper) {
