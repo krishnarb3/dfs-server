@@ -14,12 +14,14 @@ import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi
 
 
 class FileServerVerticle : AbstractVerticle() {
+
+    val publicHost = "10.1.92.95"
     override fun start() {
         ipAddressFlowable.subscribe({
-            val igniteConf = staticIpConfig(it.hostAddress)
+            val igniteConf = staticIpConfig(publicHost)
             val clusterManager = IgniteClusterManager(igniteConf)
             val options = VertxOptions().setClusterManager(clusterManager)
-                .setClusterHost(it.hostAddress).setClusterPublicHost(it.hostAddress).setClusterPublicPort(11123)
+                .setClusterHost(it.hostAddress).setClusterPublicHost(publicHost).setClusterPublicPort(11123)
             Vertx.rxClusteredVertx(options)
                 .subscribe({ vertx ->
                     vertx.rxExecuteBlocking<Ignite> { Ignition.start() }
